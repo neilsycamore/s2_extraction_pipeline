@@ -97,15 +97,13 @@ define([
         }, (function (i) {
           return function () {
             return stepController.selector().find('#step' + i);
-          }
+          };
         })(index + 1));
 
         return subController;
       }).value();
       stepController.activeController = stepController.controllers[0];
       stepController.activeController.initialController();
-
-      this.selector().find('.printer-select').val(stepController.activeController.config.defaultPrinter);
 
       stepController.activeController.focus();
     },
@@ -150,7 +148,6 @@ define([
           activeSubController.previousDone(child, action, data);
           controller.activeController = activeSubController;
           controller.activeController.initialController();
-          this.selector().find('.printer-select').val(controller.activeController.config.defaultPrinter);
           controller.activeController.focus();
         }
       } else if (action === 'enableBtn' || action === 'disableBtn') {
@@ -170,7 +167,7 @@ define([
       btnDetailsList = data.buttons || this.config.buttons;
       _.each(btnDetailsList, function (btnDetails) {
         thisController.view.setButtonVisible(btnDetails.action, visible);
-      })
+      });
     },
 
     changeButtonsState:function(eventData, enable){
@@ -179,7 +176,7 @@ define([
       _.each(btnDetailsList, function (btnDetails) {
         thisController.view.setButtonEnabled(btnDetails.action, enable);
         thisController.buttonClickedFlags[btnDetails.action+"clicked"] = !enable;
-      })
+      });
     }
 
   });

@@ -6,7 +6,6 @@ define([ 'config'
   , 'lib/pubsub'
 
   , 'models/base_page_model'
-  , 'lib/reception_templates'
 
   // TODO: These will move with the configuration
   , 'app-components/reception/reception'
@@ -16,7 +15,7 @@ define([ 'config'
   nextWorkflow,
   S2Root,
   BusyBox, alerts, PubSub,
-  BasePageModel, ReceptionTemplates,
+  BasePageModel,
   Reception, LabActivities
 ) {
   'use strict';
@@ -57,8 +56,6 @@ define([ 'config'
     if (!_.isUndefined(activate)) {
       var component = activate.constructor({
         app:       app,
-
-        templates: ReceptionTemplates,
 
         printers:  app.config.printers,
 
@@ -128,6 +125,13 @@ define([ 'config'
 
     nextWorkflow(this.model).
       then(function(workflowConfig){
+        if (workflowConfig)
+          {
+            var roles = workflowConfig.accepts;
+            _.each(roles, function(role) {
+              $(document.body).addClass(role.replace(/\./g, "-"));
+            });
+          }
       $.extend(workflowConfig, {initialLabware: application.model.labware});
       return application.controllerFactory.create(workflowConfig && workflowConfig.controllerName, application, workflowConfig);
     }).then(function(nextController){

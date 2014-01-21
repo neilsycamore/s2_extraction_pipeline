@@ -31,6 +31,7 @@ define([
 
     barcode.enterHandler(function() {
       var padded = _.string.lpad(barcode.val(), context.length || 13, "0");
+      barcode.val(padded);
       (validation(padded) ? success : invalid)(padded);
     });
 
@@ -47,9 +48,12 @@ define([
       name: "scanning.labelling.s2",
       view: html,
       events:{
+        "reset.s2": _.bind(html.reset, html),
         "reset_view.reception.s2": _.bind(html.reset, html),
         "activate.s2": $.haltsEvent($.ignoresEvent(_.partial(_.bind(barcode.prop, barcode), "disabled", false))),
-        "deactivate.s2": $.haltsEvent($.ignoresEvent(_.partial(_.bind(barcode.prop, barcode), "disabled", true))),
+        "deactivate.s2": _.wrap(function(func) {
+          return func();
+        }, $.haltsEvent($.ignoresEvent(_.partial(_.bind(barcode.prop, barcode), "disabled", true)))),
         "focus": $.haltsEvent($.ignoresEvent(_.bind(barcode.focus, barcode)))
       }
     };
